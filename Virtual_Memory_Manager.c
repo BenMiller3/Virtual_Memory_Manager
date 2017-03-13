@@ -17,7 +17,7 @@
 */
 
 #include <stdio.h>
-// Not ON WINDOWS! #include <sys/mman.h> //For mmap() (Memory mapped file(s))
+#include <sys/mman.h> //For mmap() (Memory mapped file(s))
 #include <string.h> // For memcpy() (COPIES a block of memory)
 #include <fcntl.h> // last 2 for file descriptors
 #include <stdlib.h>
@@ -36,6 +36,7 @@ int totalTLBhits;
 #define PAGES 8
 #define PAGE_SIZE 256
 #define PAGE_TABLE_ENTRIES 256
+#define BACKING_STORE_SIZE 65536
 
 int main(int argc, char* argv []){
 
@@ -46,6 +47,11 @@ int main(int argc, char* argv []){
         else if(argc < 3){
                 printf("ERROR: Must input a file to be translated and its corresponding Backing Store.\n");
                 return -1;}
+
+	// Mapping the BACKING STORE to a memory location
+	
+	int binFile = open(argv[2],O_RDONLY);
+	mmap(0,BACKING_STORE_SIZE,PROT_WRITE,MAP_SHARED, binFile, OFFSET_MASK);
 
         // Initialize the Page Table as an integer with all -1 values.
         int page_table[PAGE_TABLE_ENTRIES];
@@ -88,7 +94,7 @@ int main(int argc, char* argv []){
         /* Final Output Lines */
         printf("Number of Translated Addresses = %d\n", totalTranslatedAddresses);
         printf("Page Faults = %d\n",totalPageFaults);
-        printf("TLB Hits = %d",totalTLBhits);
+        printf("TLB Hits = %d\n",totalTLBhits);
 
         return 0;
 }
