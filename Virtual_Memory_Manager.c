@@ -37,6 +37,7 @@ int totalTLBhits;
 #define PAGE_SIZE 256
 #define PAGE_TABLE_ENTRIES 256
 #define BACKING_STORE_SIZE 65536
+#define MEMORY_SIZE 8
 
 int main(int argc, char* argv []){
 
@@ -81,6 +82,7 @@ int main(int argc, char* argv []){
                         int storedValue = 10;
 
                         printf("Virtual address: %d Physical address: %d Value: %d\n",virtualAddress, physicalAddress, storedValue);
+			printf("THE PAGE NUMBER IS: %d\n",pageNum);
                         totalTranslatedAddresses++;
                 }
 
